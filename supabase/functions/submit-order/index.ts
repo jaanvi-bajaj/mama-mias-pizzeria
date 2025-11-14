@@ -54,15 +54,11 @@ Deno.serve(async (req: Request) => {
       .from('orders')
       .insert({
         customer_name: orderData.customer_name,
-        email: orderData.email,
-        phone: orderData.phone,
-        address: orderData.address,
-        payment_mode: orderData.payment_mode,
-        card_number: orderData.card_number,
-        expiry_month: orderData.expiry_month,
-        expiry_year: orderData.expiry_year,
+        customer_phone: orderData.phone,
+        delivery_address: orderData.address,
+        payment_method: orderData.payment_mode,
         items: orderData.items,
-        total: orderData.total,
+        total_amount: orderData.total,
         status: 'pending',
       })
       .select()
