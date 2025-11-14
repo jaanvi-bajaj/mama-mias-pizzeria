@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Viewer - Mama Mia's Pizzeria</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f3f4f6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .refresh-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .tabs {
+            background: white;
+            display: flex;
+            border-bottom: 2px solid #e5e7eb;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab:hover {
+            color: #ea580c;
+        }
+        .tab.active {
+            color: #ea580c;
+            border-bottom-color: #ea580c;
+        }
+        .badge {
+            background: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th {
+            background: #f9fafb;
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        tr:hover {
+            background: #f9fafb;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-confirmed { background: #d1fae5; color: #065f46; }
+        .status-completed { background: #dbeafe; color: #1e40af; }
+        .status-cancelled { background: #fee2e2; color: #991b1b; }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                    <line x1="4" y1="22" x2="4" y2="15"></line>
+                </svg>
+                <h1>Live Database Viewer</h1>
+            </div>
+            <p>Mama Mia's Pizzeria - Auto-refreshes every 5 seconds</p>
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Now</button>
+        </div>
+
+        <div class="tabs" id="tabs"></div>
+
+        <div class="content" id="content">
+            <div class="loading">Loading database...</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://zhdspeckoenhkbuirlrk.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoZHNwZWNrb2VuaGtidWlybHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxMjc3MzQsImV4cCI6MjA3ODcwMzczNH0.cY50Vm_FiMET08gnFDbBd-0u1JS-5ZLwpKz4jio-GCc';
+
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentTab = 'menu_items';
+        let data = {
+            menu_items: [],
+            reservations: [],
+            orders: [],
+            comments: [],
+            contact_messages: [],
+            history: []
+        };
+
+        const tables = [
+            { id: 'menu_items', label: 'Menu Items', columns: ['name', 'category', 'description', 'price', 'available'] },
+            { id: 'reservations', label: 'Reservations', columns: ['name', 'email', 'phone', 'date', 'time', 'guests', 'status'] },
+            { id: 'orders', label: 'Orders', columns: ['customer_name', 'customer_email', 'customer_phone', 'total_amount', 'payment_method', 'status'] },
+            { id: 'comments', label: 'Testimonials', columns: ['customer_name', 'rating', 'comment', 'approved'] },
+            { id: 'contact_messages', label: 'Contact', columns: ['name', 'email', 'subject', 'message'] },
+            { id: 'history', label: 'History', columns: ['year', 'title', 'description'] }
+        ];
+
+        async function loadAllData() {
+            try {
+                const results = await Promise.all([
+                    supabaseClient.from('menu_items').select('*').order('category'),
+                    supabaseClient.from('reservations').select('*').order('created_at', { ascending: false }),
+                    supabaseClient.from('orders').select('*').order('created_at', { ascending: false }),
+                    supabaseClient.from('comments').select('*').order('created_at', { ascending: false }),
+                    supabaseClient.from('contact_messages').select('*').order('created_at', { ascending: false }),
+                    supabaseClient.from('history').select('*').order('year')
+                ]);
+
+                data.menu_items = results[0].data || [];
+                data.reservations = results[1].data || [];
+                data.orders = results[2].data || [];
+                data.comments = results[3].data || [];
+                data.contact_messages = results[4].data || [];
+                data.history = results[5].data || [];
+
+                renderTabs();
+                renderTable();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('content').innerHTML = '<div class="empty">Error loading data. Check console.</div>';
+            }
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('tabs');
+            tabsContainer.innerHTML = tables.map(table => `
+                <button
+                    class="tab ${currentTab === table.id ? 'active' : ''}"
+                    onclick="switchTab('${table.id}')"
+                >
+                    ${table.label}
+                    <span class="badge">${data[table.id].length}</span>
+                </button>
+            `).join('');
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            renderTabs();
+            renderTable();
+        }
+
+        function renderTable() {
+            const content = document.getElementById('content');
+            const table = tables.find(t => t.id === currentTab);
+            const tableData = data[currentTab];
+
+            if (tableData.length === 0) {
+                content.innerHTML = '<div class="empty">No data in this table yet</div>';
+                return;
+            }
+
+            const formatValue = (key, value) => {
+                if (value === null || value === undefined) return '-';
+                if (key === 'status') {
+                    return `<span class="status-badge status-${value}">${value}</span>`;
+                }
+                if (key === 'price' || key === 'total_amount') {
+                    return `$${parseFloat(value).toFixed(2)}`;
+                }
+                if (key === 'available' || key === 'approved') {
+                    return value ? '✓ Yes' : '✗ No';
+                }
+                if (typeof value === 'object') {
+                    return JSON.stringify(value);
+                }
+                return String(value);
+            };
+
+            content.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            ${table.columns.map(col => `<th>${col.replace(/_/g, ' ')}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableData.map(row => `
+                            <tr>
+                                ${table.columns.map(col => `<td>${formatValue(col, row[col])}</td>`).join('')}
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        loadAllData();
+        setInterval(loadAllData, 5000);
+    </script>
+</body>
+</html>

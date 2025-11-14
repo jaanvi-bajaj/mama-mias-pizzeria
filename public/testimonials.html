@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials - Mama Mia's Pizzeria</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🍕</span>
+                <span class="logo-text">Mama Mia's Pizzeria</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="reservations.html">Reservations</a></li>
+                <li><a href="testimonials.html" class="active">Testimonials</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>What Our Customers Say</h1>
+        <p>Real reviews from real people</p>
+    </div>
+
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="testimonials-intro">
+                <h2>Share Your Experience</h2>
+                <p>We'd love to hear from you! Leave a review and let us know how we're doing.</p>
+            </div>
+
+            <div class="testimonial-form-container">
+                <form id="testimonial-form" class="form">
+                    <h3>Leave a Review</h3>
+
+                    <div class="form-group">
+                        <label for="customer-name">Your Name *</label>
+                        <input type="text" id="customer-name" name="customer-name" placeholder="Enter your name" required>
+                        <span class="error-text" id="customer-name-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rating">Rating *</label>
+                        <div class="star-rating" id="star-rating">
+                            <span class="star" data-rating="1">☆</span>
+                            <span class="star" data-rating="2">☆</span>
+                            <span class="star" data-rating="3">☆</span>
+                            <span class="star" data-rating="4">☆</span>
+                            <span class="star" data-rating="5">☆</span>
+                        </div>
+                        <input type="hidden" id="rating" name="rating" value="0" required>
+                        <span class="error-text" id="rating-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comment">Your Review *</label>
+                        <textarea id="comment" name="comment" rows="5" placeholder="Tell us about your experience..." required></textarea>
+                        <span class="error-text" id="comment-error"></span>
+                    </div>
+
+                    <button type="submit" class="submit-button" id="testimonial-submit-btn">Submit Review</button>
+                </form>
+                <div id="testimonial-message" class="message"></div>
+            </div>
+
+            <div class="testimonials-display">
+                <h2>Customer Reviews</h2>
+                <div id="testimonials-loading" class="loading-message">Loading reviews...</div>
+                <div id="testimonials-error" class="error-message"></div>
+                <div id="testimonials-list" class="testimonials-grid">
+                    <!-- Testimonials will be loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>📍 Sheikh Zayed Road, Dubai Marina</p>
+                    <p>Dubai, United Arab Emirates</p>
+                    <p>📞 +971 4 123 4567</p>
+                    <p>✉️ info@mamamiaspizzeria.ae</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Opening Hours</h3>
+                    <p>Sunday - Thursday: 11:00 AM - 11:00 PM</p>
+                    <p>Friday - Saturday: 11:00 AM - 12:00 AM</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Location</h3>
+                    <div class="map-container">
+                        <a href="https://maps.google.com/?q=Dubai+Marina" target="_blank" class="map-link">View on Google Maps</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mama Mia's Pizzeria. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Mama Mia's Pizzeria</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="logo-icon">🍕</span>
+                <span class="logo-text">Mama Mia's Pizzeria</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html" class="active">Menu</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="reservations.html">Reservations</a></li>
+                <li><a href="testimonials.html">Testimonials</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>Our Menu</h1>
+        <p>Delicious pizzas made fresh daily</p>
+    </div>
+
+    <section class="menu-section">
+        <div class="container">
+            <div class="menu-filter">
+                <button class="filter-btn active" data-category="all">All Items</button>
+                <button class="filter-btn" data-category="pizza">Pizzas</button>
+                <button class="filter-btn" data-category="appetizer">Appetizers</button>
+                <button class="filter-btn" data-category="salad">Salads</button>
+                <button class="filter-btn" data-category="dessert">Desserts</button>
+                <button class="filter-btn" data-category="beverage">Beverages</button>
+            </div>
+            <div id="menu-loading" class="loading-message">Loading menu items...</div>
+            <div id="menu-error" class="error-message"></div>
+            <div id="menu-items" class="menu-grid">
+                <!-- Menu items will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>📍 Sheikh Zayed Road, Dubai Marina</p>
+                    <p>Dubai, United Arab Emirates</p>
+                    <p>📞 +971 4 123 4567</p>
+                    <p>✉️ info@mamamiaspizzeria.ae</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Opening Hours</h3>
+                    <p>Sunday - Thursday: 11:00 AM - 11:00 PM</p>
+                    <p>Friday - Saturday: 11:00 AM - 12:00 AM</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Location</h3>
+                    <div class="map-container">
+                        <a href="https://maps.google.com/?q=Dubai+Marina" target="_blank" class="map-link">View on Google Maps</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mama Mia's Pizzeria. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
