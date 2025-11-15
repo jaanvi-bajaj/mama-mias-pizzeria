@@ -27,7 +27,7 @@ export default function OrderConfirmation() {
 
           <div className="mb-8">
             <p className="text-2xl font-semibold text-italian-green mb-3">
-              Grazie Mille! 🍕
+              Grazie Mille!
             </p>
             <p className="text-gray-700 text-lg mb-2">
               Thank you for choosing Mama Mia's Pizzeria!

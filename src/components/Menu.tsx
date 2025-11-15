@@ -89,7 +89,7 @@ export default function Menu() {
     addToCart({
       id: item.id,
       name: item.name,
-      price: item.price * 3.67,
+      price: item.price,
       image: item.image || categoryImages[item.category] || categoryImages.pizza,
       description: item.description,
     });
@@ -168,7 +168,7 @@ export default function Menu() {
 
                   <div className="flex justify-between items-center mt-4">
                     <p className="text-2xl font-bold text-italian-green">
-                      AED {(item.price * 3.67).toFixed(2)}
+                      AED {Number(item.price).toFixed(2)}
                     </p>
                     <button
                       onClick={() => handleAddToCart(item)}
