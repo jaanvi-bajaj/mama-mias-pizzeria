@@ -25,9 +25,18 @@ export default function OrderConfirmation() {
             Order Successfully Placed!
           </h2>
 
-          <p className="text-gray-700 text-lg mb-6">
-            Your order has been received and is being prepared with care.
-          </p>
+          <div className="mb-8">
+            <p className="text-2xl font-semibold text-italian-green mb-3">
+              Grazie Mille! 🍕
+            </p>
+            <p className="text-gray-700 text-lg mb-2">
+              Thank you for choosing Mama Mia's Pizzeria!
+            </p>
+            <p className="text-gray-600">
+              Your order has been received and is being prepared with care by our expert chefs.
+              We appreciate your business and can't wait to serve you the finest Italian cuisine!
+            </p>
+          </div>
 
           <div className="bg-italian-cream rounded-lg p-6 mb-8">
             <p className="text-sm text-gray-600 mb-2">Order ID</p>
